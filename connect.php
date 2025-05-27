@@ -1,7 +1,7 @@
 <?php 
 
 // INSERT INTO `notess` (`sno`, `title`, `description`, `tstamp`) VALUES (NULL, 'by books ', 'plz go bu store', CURRENT_TIMESTAMP);
-
+$insert = false;
 // connecting to the Database 
 
 $servername = "localhost";
@@ -23,17 +23,21 @@ if ($_SERVER['REQUEST_METHOD']== 'POST') {
   $title = $_POST["title"];
   $description = $_POST["description"];
 
-  //sql query to be wxecuted 
-  $sql = "INSERT INTO `notess` (`title`, `description` ) VALUES (`$title`, `$description `)";
+//sql query to be executed 
+$sql = "INSERT INTO `notess` (`title`, `description` ) VALUES ('$title', '$description')";
 
-  // Add a new 
+// ✅ Add this line below to fix error
+$result = mysqli_query($conn, $sql);  // ✅ Fix added here
 
-  if ($result) {
-   echo "The record has been inserted successfully !<br> ";
+// Add a new 
+if ($result) {
+   //echo "The record has been inserted successfully !<br> ";
+    $insert = true;
   }
-  else {
-     echo "The record was not inserted successfully becouse of this error ---> ! ".mysqli_error($conn);
-  }
+else {
+   echo "The record was not inserted successfully becouse of this error ---> ! ".mysqli_error($conn);
+}
+
 }
 
 
@@ -68,7 +72,27 @@ if ($_SERVER['REQUEST_METHOD']== 'POST') {
       </form>
     </nav>
 
+       <?php
+            if ($insert) {
+              echo "<div class='alert alert-success alert-dismissible fade show' role='alert'
+        style='
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+          padding: 15px;
+          font-size: 16px;
+          box-shadow: 0 4px 8px rgba(0, 128, 0, 0.1);
+          border-radius: 8px;
+          margin-top: 20px;
+        '>
+        <strong>Success!</strong> Your note has been inserted successfully.
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+      </div>";
 
+
+            }
+
+       ?>
 
      <div class="container">
        
@@ -172,12 +196,7 @@ if ($_SERVER['REQUEST_METHOD']== 'POST') {
          ?>
 
       
-      <tr>
-        <th>2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
+   
       
     </tbody>
   </table>
